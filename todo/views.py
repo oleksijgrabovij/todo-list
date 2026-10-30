@@ -1,6 +1,5 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.views import generic, View
-from django.views.generic import UpdateView, DeleteView
 from todo.models import Task, Tag
 from django.urls import reverse_lazy
 from todo.forms import TaskForm, TagForm
@@ -8,10 +7,13 @@ from todo.forms import TaskForm, TagForm
 
 class TaskListView(generic.ListView):
     model = Task
+    queryset = Task.objects.prefetch_related("tags")
+    paginate_by = 5 # Number of tasks per page
 
 
 class TagListView(generic.ListView):
     model = Tag
+    paginate_by = 5 # Number of tags per page
 
 
 class TagCreateView(generic.CreateView):
@@ -49,7 +51,7 @@ class TaskDeleteView(generic.DeleteView):
 
 
 class TaskStatusUpdateView(View):
-    def get(self, request, pk):
+    def post(self, request, pk):
         task = get_object_or_404(Task, pk=pk) # Get task or return 404 error
         task.is_done = not task.is_done # Toggle the boolean status
         task.save() # Save changes to the database
