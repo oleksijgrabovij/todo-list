@@ -39,17 +39,17 @@
                         {% empty %}
                             none
                         {% endfor %}
-                        <a href="#" class="text-primary ms-2 text-decoration-none">Update</a>
-                        <a href="#" class="text-primary ms-1 text-decoration-none">Delete</a>
+                        <a href="{% url 'todo:task-update' pk=task.id %}" class="text-primary ms-2 text-decoration-none">Update</a>
+                        <a href="{% url 'todo:task-delete' pk=task.id %}" class="text-primary ms-1 text-decoration-none">Delete</a>
                     </p>
                 </div>
                 
                 <!-- Complete/Undo button -->
                 <div>
                     {% if task.is_done %}
-                        <a href="#" class="btn btn-secondary">Undo</a>
+                        <a href="{% url 'todo:task-toggle' pk=task.id %}" class="btn btn-secondary">Undo</a>
                     {% else %}
-                        <a href="#" class="btn btn-success">Complete</a>
+                        <a href="{% url 'todo:task-toggle' pk=task.id %}" class="btn btn-success">Complete</a>
                     {% endif %}
                 </div>
             </div>
