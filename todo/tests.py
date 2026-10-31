@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Tag, Task
-from .forms import TagForm, TaskForm
+from todo.models import Tag, Task
+from todo.forms import TagForm, TaskForm
 
 
 class ModelTests(TestCase):
