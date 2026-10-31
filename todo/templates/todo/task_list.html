@@ -1,0 +1,87 @@
+{% extends "todo/base.html" %}
+
+{% block content %}
+<!-- Page header and add button -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>TODO list</h1>
+    <a href="{% url 'todo:task-create' %}" class="btn btn-primary">Add task</a>
+</div>
+
+<!-- Iterate over tasks from database -->
+<div class="task-list">
+    {% for task in task_list %}
+        <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <!-- Task content and status -->
+                    <h5>
+                        <strong>{{ task.content }}</strong>
+                        {% if task.is_done %}
+                            <span class="text-success ms-2">Done</span>
+                        {% else %}
+                            <span class="text-danger ms-2">Not done</span>
+                        {% endif %}
+                    </h5>
+
+                    <!-- Task dates -->
+                    <p class="text-muted mb-1" style="font-size: 0.9em;">
+                        Created: {{ task.created_at|date:"F j, Y, g:i a" }}
+                        {% if task.deadline %}
+                            . Deadline: {{ task.deadline|date:"F j, Y, g:i a" }}
+                        {% endif %}
+                    </p>
+
+                    <!-- Task tags -->
+                    <p class="mb-1" style="font-size: 0.9em;">
+                        <span class="text-muted">Tags:</span> 
+                        {% for tag in task.tags.all %}
+                            {{ tag.name }}{% if not forloop.last %} {% endif %}
+                        {% empty %}
+                            none
+                        {% endfor %}
+                        <a href="{% url 'todo:task-update' pk=task.id %}" class="text-primary ms-2 text-decoration-none">Update</a>
+                        <a href="{% url 'todo:task-delete' pk=task.id %}" class="text-primary ms-1 text-decoration-none">Delete</a>
+                    </p>
+                </div>
+                
+                <!-- Complete/Undo button -->
+                <div>
+                    <form action="{% url 'todo:task-toggle' pk=task.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        {% if task.is_done %}
+                            <button type="submit" class="btn btn-secondary">Undo</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-success">Complete</button>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+            <hr>
+        </div>
+    {% empty %}
+        <p>No tasks yet.</p>
+    {% endfor %}
+</div>
+<!-- Pagination controls -->
+{% if is_paginated %}
+  <nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+      {% endif %}
+
+      <li class="page-item active">
+        <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      </li>
+
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}
+{% endblock %}
