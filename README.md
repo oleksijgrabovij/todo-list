@@ -26,3 +26,27 @@ Follow these exact instructions to configure and run the project on your local m
    ```bash
    git clone https://github.com/oleksijgrabovij/todo-list.git
    cd todo-list
+
+2. **Create and activate a virtual environment:**
+   python -m venv venv
+   # On Windows: venv\Scripts\activate
+   # On macOS/Linux: source venv/bin/activate
+
+3. **Install required dependencies:**
+   pip install -r requirements.txt
+
+4. **Set up environment variables. Create a .env file and add:**
+   SECRET_KEY=your_secret_key
+   DEBUG=True
+
+5. **Apply database migrations:**
+   python manage.py migrate
+
+6. **Run the development server:**
+   python manage.py runserver
+
+## Usage
+Open http://127.0.0.1:8000/ in your browser. 
+- Tasks: You can add, edit, delete, and toggle tasks (Complete/Undo).
+- Tags: Manage tags and assign them to tasks for better organization.
+- Pagination: Browse through your tasks and tags easily via the pagination controls at the bottom.
